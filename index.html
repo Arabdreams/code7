@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Tools | Powered by code7</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            background-color: #ffffff;
+            color: #1d1d1f;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Header - Apple style */
+        header {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            border-bottom: 1px solid #d2d2d7;
+            height: 52px;
+        }
+        
+        .nav-container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 22px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: 21px;
+            font-weight: 600;
+            color: #1d1d1f;
+            letter-spacing: -0.32px;
+        }
+        
+        .logo span {
+            color: #0071e3;
+            font-weight: 500;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 24px;
+        }
+        
+        nav a {
+            color: #1d1d1f;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #0071e3;
+        }
+        
+        /* Main content */
+        main {
+            padding-top: 52px;
+        }
+        
+        /* Hero section */
+        .hero {
+            padding: 160px 22px 120px;
+            text-align: center;
+            background-color: #f5f5f7;
+        }
+        
+        .hero h1 {
+            font-size: 80px;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            margin-bottom: 18px;
+            line-height: 1.05;
+        }
+        
+        .hero p {
+            font-size: 28px;
+            font-weight: 400;
+            color: #1d1d1f;
+            max-width: 640px;
+            margin: 0 auto;
+            line-height: 1.14286;
+        }
+        
+        /* Tools section */
+        .tools-section {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 100px 22px;
+        }
+        
+        .section-title {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.96px;
+            text-align: center;
+            margin-bottom: 60px;
+            line-height: 1.08349;
+        }
+        
+        .tools-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background-color: #f5f5f7;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .tool-item {
+            background-color: #ffffff;
+            padding: 30px;
+            border-bottom: 1px solid #f5f5f7;
+            transition: background-color 0.2s;
+        }
+        
+        .tool-item:hover {
+            background-color: #fafafa;
+        }
+        
+        .tool-item:last-child {
+            border-bottom: none;
+        }
+        
+        .tool-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .tool-title {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.28px;
+            color: #1d1d1f;
+        }
+        
+        .tool-status {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0071e3;
+            letter-spacing: -0.14px;
+        }
+        
+        .tool-description {
+            font-size: 17px;
+            color: #86868b;
+            line-height: 1.47059;
+            margin-bottom: 16px;
+            max-width: 620px;
+        }
+        
+        .tool-tags {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .tool-tag {
+            font-size: 12px;
+            color: #515154;
+            background-color: #f5f5f7;
+            padding: 4px 10px;
+            border-radius: 14px;
+            letter-spacing: -0.12px;
+        }
+        
+        /* Open Tool Button */
+        .tool-actions {
+            margin-top: 8px;
+        }
+        
+        .open-tool-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: #0071e3;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .open-tool-btn:hover {
+            background-color: #0077ED;
+            transform: scale(1.03);
+        }
+        
+        .open-tool-btn i {
+            margin-left: 8px;
+            font-size: 12px;
+        }
+        
+        /* Placeholder items */
+        .placeholder-item {
+            opacity: 0.6;
+        }
+        
+        .placeholder-item .tool-title {
+            color: #86868b;
+        }
+        
+        .placeholder-item .tool-description {
+            color: #a1a1a6;
+        }
+        
+        /* Coming Soon Button */
+        .coming-soon-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: transparent;
+            color: #86868b;
+            border: 1px solid #d2d2d7;
+            padding: 8px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: default;
+            transition: all 0.2s ease;
+        }
+        
+        .coming-soon-btn i {
+            margin-left: 8px;
+            font-size: 12px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #f5f5f7;
+            padding: 40px 22px;
+            border-top: 1px solid #d2d2d7;
+        }
+        
+        .footer-content {
+            max-width: 980px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .footer-logo {
+            font-size: 21px;
+            font-weight: 600;
+            letter-spacing: -0.32px;
+            margin-bottom: 16px;
+        }
+        
+        .footer-logo span {
+            color: #0071e3;
+            font-weight: 500;
+        }
+        
+        .copyright {
+            font-size: 14px;
+            color: #86868b;
+        }
+        
+        /* Responsive design */
+        @media only screen and (max-width: 1068px) {
+            .hero h1 {
+                font-size: 64px;
+                letter-spacing: -1.2px;
+            }
+            
+            .hero p {
+                font-size: 24px;
+            }
+            
+            .section-title {
+                font-size: 40px;
+                letter-spacing: -0.8px;
+            }
+            
+            .tool-title {
+                font-size: 24px;
+                letter-spacing: -0.24px;
+            }
+        }
+        
+        @media only screen and (max-width: 734px) {
+            .hero {
+                padding: 120px 22px 80px;
+            }
+            
+            .hero h1 {
+                font-size: 48px;
+                letter-spacing: -0.9px;
+            }
+            
+            .hero p {
+                font-size: 21px;
+            }
+            
+            .tools-section {
+                padding: 80px 22px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+                letter-spacing: -0.64px;
+                margin-bottom: 40px;
+            }
+            
+            .tool-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .tool-item {
+                padding: 24px;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            nav ul {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 40px;
+                letter-spacing: -0.75px;
+            }
+            
+            .hero p {
+                font-size: 19px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with navigation -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">Automation Tools</div>
+            <nav>
+                <ul>
+                    <li><a href="#tools">Tools</a></li>
+                    <li><a href="#upcoming">Upcoming</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero section -->
+        <section class="hero">
+            <h1>Automation tools<br>powered by <span>code7</span></h1>
+            <p>Streamline your workflow with our collection of powerful, intuitive automation tools.</p>
+        </section>
+
+        <!-- Tools section -->
+        <section class="tools-section" id="tools">
+            <h2 class="section-title">Tools</h2>
+            <div class="tools-list">
+                <!-- First tool - Excel Filter -->
+                <div class="tool-item">
+                    <div class="tool-header">
+                        <div class="tool-title">Excel Filter</div>
+                        <div class="tool-status">Available</div>
+                    </div>
+                    <p class="tool-description">Filter rows by numbers in Excel files with advanced filtering options. Process large datasets quickly and efficiently.</p>
+                    <div class="tool-tags">
+                        <div class="tool-tag">Excel</div>
+                        <div class="tool-tag">Data Processing</div>
+                        <div class="tool-tag">Automation</div>
+                    </div>
+                    <div class="tool-actions">
+                        <a href="#" class="open-tool-btn">Open Tool <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Placeholder for future tools -->
+                <div class="tool-item placeholder-item">
+                    <div class="tool-header">
+                        <div class="tool-title">CSV Processor</div>
+                        <div class="tool-status">Coming Soon</div>
+                    </div>
+                    <p class="tool-description">Batch process CSV files with custom transformations and validation rules.</p>
+                    <div class="tool-tags">
+                        <div class="tool-tag">CSV</div>
+                        <div class="tool-tag">Data</div>
+                        <div class="tool-tag">Batch Processing</div>
+                    </div>
+                    <div class="tool-actions">
+                        <button class="coming-soon-btn">Coming Soon <i class="fas fa-clock"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Placeholder for future tools -->
+                <div class="tool-item placeholder-item">
+                    <div class="tool-header">
+                        <div class="tool-title">Image Optimizer</div>
+                        <div class="tool-status">Coming Soon</div>
+                    </div>
+                    <p class="tool-description">Optimize images for web and mobile with adjustable compression settings.</p>
+                    <div class="tool-tags">
+                        <div class="tool-tag">Images</div>
+                        <div class="tool-tag">Optimization</div>
+                        <div class="tool-tag">Web</div>
+                    </div>
+                    <div class="tool-actions">
+                        <button class="coming-soon-btn">Coming Soon <i class="fas fa-clock"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Placeholder for future tools -->
+                <div class="tool-item placeholder-item">
+                    <div class="tool-header">
+                        <div class="tool-title">PDF Converter</div>
+                        <div class="tool-status">Coming Soon</div>
+                    </div>
+                    <p class="tool-description">Convert documents to PDF format with consistent formatting and layout.</p>
+                    <div class="tool-tags">
+                        <div class="tool-tag">PDF</div>
+                        <div class="tool-tag">Documents</div>
+                        <div class="tool-tag">Conversion</div>
+                    </div>
+                    <div class="tool-actions">
+                        <button class="coming-soon-btn">Coming Soon <i class="fas fa-clock"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Placeholder for future tools -->
+                <div class="tool-item placeholder-item">
+                    <div class="tool-header">
+                        <div class="tool-title">Data Validator</div>
+                        <div class="tool-status">Coming Soon</div>
+                    </div>
+                    <p class="tool-description">Validate and clean datasets according to custom rules and schemas.</p>
+                    <div class="tool-tags">
+                        <div class="tool-tag">Data</div>
+                        <div class="tool-tag">Validation</div>
+                        <div class="tool-tag">Quality</div>
+                    </div>
+                    <div class="tool-actions">
+                        <button class="coming-soon-btn">Coming Soon <i class="fas fa-clock"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Placeholder for future tools -->
+                <div class="tool-item placeholder-item">
+                    <div class="tool-header">
+                        <div class="tool-title">Report Generator</div>
+                        <div class="tool-status">Coming Soon</div>
+                    </div>
+                    <p class="tool-description">Automatically generate reports from data sources with customizable templates.</p>
+                    <div class="tool-tags">
+                        <div class="tool-tag">Reports</div>
+                        <div class="tool-tag">Automation</div>
+                        <div class="tool-tag">Templates</div>
+                    </div>
+                    <div class="tool-actions">
+                        <button class="coming-soon-btn">Coming Soon <i class="fas fa-clock"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="about">
+        <div class="footer-content">
+            <div class="footer-logo">Automation Tools powered by <span>code7</span></div>
+            <div class="copyright">New tools added regularly. &copy; 2023</div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 60,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Open Tool functionality
+        const openToolBtn = document.querySelector('.open-tool-btn');
+        
+        openToolBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Show a notification that the tool would open
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #0071e3;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 1000;
+                box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
+                animation: slideIn 0.3s ease;
+            `;
+            
+            // Add animation keyframes
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            notification.textContent = 'Opening Excel Filter tool...';
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+            
+            // In a real implementation, this would open the actual tool
+            // window.open('/excel-filter-tool', '_blank');
+        });
+        
+        // Update copyright year
+        document.querySelector('.copyright').innerHTML = 
+            document.querySelector('.copyright').innerHTML.replace('2023', new Date().getFullYear());
+    </script>
+</body>
+</html>
