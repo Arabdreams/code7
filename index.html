@@ -1,9 +1,8 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" href="c7.jpg">
+      <link rel="icon" type="image/jpeg" href="c7.jpg">
     <title>Automation Tools | Powered by code7</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -397,7 +396,7 @@
                         <div class="tool-tag">Automation</div>
                     </div>
                     <div class="tool-actions">
-                       <a href="excelfilterbynumber.html" class="open-tool-btn">Open Tool <i class="fas fa-arrow-right"></i></a>
+                        <a href="excelfilterbynumber.html" class="open-tool-btn">Open Tool <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
                 
@@ -515,58 +514,55 @@
             });
         });
         
-        // Open Tool functionality
-        const openToolBtn = document.querySelector('.open-tool-btn');
-        
-        openToolBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Show a notification that the tool would open
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background-color: #0071e3;
-                color: white;
-                padding: 12px 24px;
-                border-radius: 8px;
-                font-size: 14px;
-                font-weight: 500;
-                z-index: 1000;
-                box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
-                animation: slideIn 0.3s ease;
-            `;
-            
-            // Add animation keyframes
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideIn {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
-                }
-                @keyframes slideOut {
-                    from { transform: translateX(0); opacity: 1; }
-                    to { transform: translateX(100%); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-            
-            notification.textContent = 'Opening Excel Filter tool...';
-            document.body.appendChild(notification);
-            
-            // Remove notification after 3 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
+        // Notification for coming soon tools
+        document.querySelectorAll('.coming-soon-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Show a notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background-color: #86868b;
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    z-index: 1000;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                    animation: slideIn 0.3s ease;
+                `;
+                
+                // Add animation keyframes
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes slideIn {
+                        from { transform: translateX(100%); opacity: 0; }
+                        to { transform: translateX(0); opacity: 1; }
                     }
-                }, 300);
-            }, 3000);
-            
-            // In a real implementation, this would open the actual tool
-            // window.open('/excel-filter-tool', '_blank');
+                    @keyframes slideOut {
+                        from { transform: translateX(0); opacity: 1; }
+                        to { transform: translateX(100%); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                notification.textContent = 'This tool is coming soon!';
+                document.body.appendChild(notification);
+                
+                // Remove notification after 3 seconds
+                setTimeout(() => {
+                    notification.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }, 3000);
+            });
         });
         
         // Update copyright year
