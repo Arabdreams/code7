@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Comparator</title>
+    <style>
+        /* Apple Minimal Design */
+        :root {
+            --bg: #ffffff;
+            --surface: #f5f5f7;
+            --text: #1d1d1f;
+            --text-light: #86868b;
+            --primary: #0066cc;
+            --border: #d2d2d7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 22px;
+        }
+
+        /* Header */
+        header {
+            padding: 80px 0 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 60px;
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.022em;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            font-weight: 400;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.33337;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 48px;
+            margin-bottom: 40px;
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--border);
+            border-radius: 18px;
+            padding: 80px 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+            margin-bottom: 32px;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--primary);
+        }
+
+        .upload-icon {
+            font-size: 32px;
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+
+        .upload-text {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .upload-subtext {
+            font-size: 17px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+
+        /* File List */
+        .file-list {
+            margin-top: 32px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .file-name {
+            font-weight: 500;
+            flex: 1;
+            font-size: 17px;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 4px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remove-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Control Buttons */
+        .control-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .primary-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 32px;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex: 1;
+        }
+
+        .primary-button:hover:not(:disabled) {
+            background: #0052a3;
+        }
+
+        .primary-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .secondary-button {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 14px 32px;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .secondary-button:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Results Section */
+        .results-section {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 48px;
+            display: none;
+        }
+
+        .results-header {
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-title {
+            font-size: 40px;
+            font-weight: 700;
+            letter-spacing: -0.022em;
+            margin-bottom: 8px;
+        }
+
+        .results-subtitle {
+            font-size: 21px;
+            color: var(--text-light);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .stat-item {
+            background: var(--primary);
+            color: white;
+            border-radius: 18px;
+            padding: 24px;
+        }
+
+        .stat-value {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 17px;
+            opacity: 0.9;
+        }
+
+        /* Comparison Results */
+        .comparison-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .comparison-card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 21px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .card-subtitle {
+            font-size: 15px;
+            color: var(--text-light);
+        }
+
+        .numbers-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .number-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 17px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .number-item:last-child {
+            border-bottom: none;
+        }
+
+        .number-value {
+            font-family: 'SF Mono', monospace;
+        }
+
+        .number-index {
+            color: var(--text-light);
+            font-size: 15px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px 0 40px;
+            color: var(--text-light);
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 40px;
+            }
+            
+            .subtitle {
+                font-size: 21px;
+            }
+            
+            .upload-section,
+            .results-section {
+                padding: 32px;
+            }
+            
+            .drop-zone {
+                padding: 60px 24px;
+            }
+            
+            .upload-text {
+                font-size: 24px;
+            }
+            
+            .control-buttons {
+                flex-direction: column;
+            }
+            
+            .stats,
+            .comparison-results {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-title {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            header {
+                padding: 60px 0 32px;
+            }
+            
+            .title {
+                font-size: 32px;
+            }
+            
+            .subtitle {
+                font-size: 19px;
+            }
+            
+            .upload-section,
+            .results-section {
+                padding: 24px;
+            }
+            
+            .drop-zone {
+                padding: 48px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">File Comparator</h1>
+            <p class="subtitle">Compare numbers across multiple file types</p>
+        </header>
+
+        <section class="upload-section">
+            <div class="drop-zone" id="dropZone">
+                <div class="upload-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <div class="upload-text">Select files to compare</div>
+                <div class="upload-subtext">CSV, Excel, TXT, JSON files supported</div>
+                <input type="file" id="fileInput" multiple accept=".csv,.xlsx,.xls,.txt,.json" style="display: none;">
+                <button class="primary-button" id="selectButton">Select Files</button>
+            </div>
+
+            <div class="file-list" id="fileList">
+                <!-- Files will appear here -->
+            </div>
+
+            <div class="control-buttons">
+                <button class="primary-button" id="compareButton" disabled>Compare Files</button>
+                <button class="secondary-button" id="clearButton">Clear All</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div>Processing files...</div>
+            </div>
+        </section>
+
+        <section class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2 class="results-title">Comparison Results</h2>
+                <p class="results-subtitle">Analysis of numbers across selected files</p>
+            </div>
+
+            <div class="stats" id="stats">
+                <!-- Stats will appear here -->
+            </div>
+
+            <div class="comparison-results" id="comparisonResults">
+                <!-- Comparison results will appear here -->
+            </div>
+        </section>
+
+        <footer>
+            <div>All processing happens locally in your browser. No data is sent to any server.</div>
+        </footer>
+    </div>
+
+    <script>
+        // File Processor
+        class FileProcessor {
+            constructor() {
+                this.files = [];
+                this.results = null;
+            }
+
+            // Extract numbers from text content
+            extractNumbers(text) {
+                const numbers = [];
+                const matches = text.match(/-?\d+\.?\d*/g);
+                
+                if (matches) {
+                    matches.forEach(match => {
+                        const num = parseFloat(match);
+                        if (!isNaN(num)) {
+                            numbers.push(num);
+                        }
+                    });
+                }
+                
+                return numbers;
+            }
+
+            // Parse CSV file
+            async parseCSV(file) {
+                const text = await file.text();
+                return this.extractNumbers(text);
+            }
+
+            // Parse text file
+            async parseText(file) {
+                const text = await file.text();
+                return this.extractNumbers(text);
+            }
+
+            // Parse JSON file
+            async parseJSON(file) {
+                const text = await file.text();
+                const data = JSON.parse(text);
+                
+                // Convert JSON to string and extract numbers
+                const jsonString = JSON.stringify(data);
+                return this.extractNumbers(jsonString);
+            }
+
+            // Parse Excel file (basic implementation)
+            async parseExcel(file) {
+                const text = await file.text();
+                return this.extractNumbers(text);
+            }
+
+            // Parse file based on extension
+            async parseFile(file) {
+                const extension = file.name.split('.').pop().toLowerCase();
+                
+                switch (extension) {
+                    case 'csv':
+                        return await this.parseCSV(file);
+                    case 'txt':
+                        return await this.parseText(file);
+                    case 'json':
+                        return await this.parseJSON(file);
+                    case 'xlsx':
+                    case 'xls':
+                        return await this.parseExcel(file);
+                    default:
+                        return [];
+                }
+            }
+
+            // Compare files
+            async compareFiles(files) {
+                const parsedFiles = [];
+                
+                for (const file of files) {
+                    const numbers = await this.parseFile(file);
+                    parsedFiles.push({
+                        name: file.name,
+                        numbers: numbers
+                    });
+                }
+                
+                // Find numbers common to all files
+                let commonNumbers = [];
+                if (parsedFiles.length > 0) {
+                    commonNumbers = [...parsedFiles[0].numbers];
+                    
+                    for (let i = 1; i < parsedFiles.length; i++) {
+                        const currentSet = new Set(parsedFiles[i].numbers);
+                        commonNumbers = commonNumbers.filter(num => currentSet.has(num));
+                    }
+                }
+                
+                // Find unique numbers per file
+                const uniqueNumbers = {};
+                parsedFiles.forEach(file => {
+                    const otherNumbers = new Set();
+                    
+                    parsedFiles.forEach(otherFile => {
+                        if (otherFile !== file) {
+                            otherFile.numbers.forEach(num => otherNumbers.add(num));
+                        }
+                    });
+                    
+                    uniqueNumbers[file.name] = file.numbers.filter(num => !otherNumbers.has(num));
+                });
+                
+                // Calculate statistics
+                const allNumbers = [];
+                parsedFiles.forEach(file => {
+                    allNumbers.push(...file.numbers);
+                });
+                
+                const uniqueAllNumbers = [...new Set(allNumbers)];
+                
+                this.results = {
+                    files: parsedFiles,
+                    commonNumbers: [...new Set(commonNumbers)],
+                    uniqueNumbers: uniqueNumbers,
+                    stats: {
+                        totalFiles: parsedFiles.length,
+                        totalNumbers: allNumbers.length,
+                        uniqueNumbersCount: uniqueAllNumbers.length,
+                        commonNumbersCount: commonNumbers.length
+                    }
+                };
+                
+                return this.results;
+            }
+        }
+
+        // UI Controller
+        class UIController {
+            constructor() {
+                this.processor = new FileProcessor();
+                this.initialize();
+            }
+
+            initialize() {
+                this.elements = {
+                    dropZone: document.getElementById('dropZone'),
+                    fileInput: document.getElementById('fileInput'),
+                    selectButton: document.getElementById('selectButton'),
+                    fileList: document.getElementById('fileList'),
+                    compareButton: document.getElementById('compareButton'),
+                    clearButton: document.getElementById('clearButton'),
+                    loading: document.getElementById('loading'),
+                    resultsSection: document.getElementById('resultsSection'),
+                    stats: document.getElementById('stats'),
+                    comparisonResults: document.getElementById('comparisonResults')
+                };
+
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                this.elements.selectButton.addEventListener('click', () => {
+                    this.elements.fileInput.click();
+                });
+
+                this.elements.fileInput.addEventListener('change', (e) => {
+                    this.handleFiles(e.target.files);
+                });
+
+                this.elements.compareButton.addEventListener('click', () => {
+                    this.compareFiles();
+                });
+
+                this.elements.clearButton.addEventListener('click', () => {
+                    this.clearAll();
+                });
+
+                // Drag and drop
+                this.elements.dropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    this.elements.dropZone.style.borderColor = '#0066cc';
+                });
+
+                this.elements.dropZone.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    this.elements.dropZone.style.borderColor = '';
+                });
+
+                this.elements.dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    this.elements.dropZone.style.borderColor = '';
+                    this.handleFiles(e.dataTransfer.files);
+                });
+            }
+
+            handleFiles(fileList) {
+                const newFiles = Array.from(fileList);
+                this.processor.files = [...this.processor.files, ...newFiles];
+                this.updateFileList();
+                this.elements.compareButton.disabled = this.processor.files.length < 2;
+            }
+
+            updateFileList() {
+                this.elements.fileList.innerHTML = '';
+                
+                if (this.processor.files.length === 0) {
+                    return;
+                }
+                
+                this.processor.files.forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <div class="file-name">${file.name}</div>
+                        <button class="remove-btn" data-index="${index}">×</button>
+                    `;
+                    
+                    fileItem.querySelector('.remove-btn').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.removeFile(index);
+                    });
+                    
+                    this.elements.fileList.appendChild(fileItem);
+                });
+            }
+
+            removeFile(index) {
+                this.processor.files.splice(index, 1);
+                this.updateFileList();
+                this.elements.compareButton.disabled = this.processor.files.length < 2;
+            }
+
+            async compareFiles() {
+                if (this.processor.files.length < 2) return;
+                
+                this.showLoading(true);
+                
+                try {
+                    const results = await this.processor.compareFiles(this.processor.files);
+                    this.displayResults(results);
+                    this.elements.resultsSection.style.display = 'block';
+                    this.elements.resultsSection.scrollIntoView({ behavior: 'smooth' });
+                } catch (error) {
+                    console.error('Error comparing files:', error);
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            displayResults(results) {
+                this.displayStats(results.stats);
+                this.displayComparison(results);
+            }
+
+            displayStats(stats) {
+                this.elements.stats.innerHTML = `
+                    <div class="stat-item">
+                        <div class="stat-value">${stats.totalFiles}</div>
+                        <div class="stat-label">Files Compared</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${stats.totalNumbers}</div>
+                        <div class="stat-label">Total Numbers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${stats.uniqueNumbersCount}</div>
+                        <div class="stat-label">Unique Numbers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${stats.commonNumbersCount}</div>
+                        <div class="stat-label">Common Numbers</div>
+                    </div>
+                `;
+            }
+
+            displayComparison(results) {
+                this.elements.comparisonResults.innerHTML = '';
+                
+                // Display common numbers
+                if (results.commonNumbers.length > 0) {
+                    const commonCard = this.createComparisonCard(
+                        'Numbers in All Files',
+                        'Found in every selected file',
+                        results.commonNumbers
+                    );
+                    this.elements.comparisonResults.appendChild(commonCard);
+                }
+                
+                // Display unique numbers per file
+                Object.entries(results.uniqueNumbers).forEach(([fileName, numbers]) => {
+                    if (numbers.length > 0) {
+                        const uniqueCard = this.createComparisonCard(
+                            `Unique to ${fileName}`,
+                            'Found only in this file',
+                            numbers
+                        );
+                        this.elements.comparisonResults.appendChild(uniqueCard);
+                    }
+                });
+            }
+
+            createComparisonCard(title, subtitle, numbers) {
+                const card = document.createElement('div');
+                card.className = 'comparison-card';
+                
+                let numbersHTML = '';
+                numbers.slice(0, 50).forEach((number, index) => {
+                    numbersHTML += `
+                        <div class="number-item">
+                            <span class="number-value">${number}</span>
+                            <span class="number-index">${index + 1}</span>
+                        </div>
+                    `;
+                });
+                
+                if (numbers.length > 50) {
+                    numbersHTML += `
+                        <div class="number-item">
+                            <span class="number-value">... ${numbers.length - 50} more numbers</span>
+                            <span class="number-index"></span>
+                        </div>
+                    `;
+                }
+                
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-title">${title}</div>
+                        <div class="card-subtitle">${subtitle} • ${numbers.length} numbers</div>
+                    </div>
+                    <div class="numbers-list">
+                        ${numbersHTML}
+                    </div>
+                `;
+                
+                return card;
+            }
+
+            clearAll() {
+                this.processor.files = [];
+                this.processor.results = null;
+                this.updateFileList();
+                this.elements.compareButton.disabled = true;
+                this.elements.resultsSection.style.display = 'none';
+                this.elements.fileInput.value = '';
+            }
+
+            showLoading(show) {
+                this.elements.loading.style.display = show ? 'block' : 'none';
+                this.elements.compareButton.disabled = show;
+                this.elements.compareButton.textContent = show ? 'Processing...' : 'Compare Files';
+            }
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', () => {
+            new UIController();
+        });
+    </script>
+</body>
+</html>
